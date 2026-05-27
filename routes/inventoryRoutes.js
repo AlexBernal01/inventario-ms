@@ -27,7 +27,19 @@ const inventoryRoutes = (req, res) => {
             const bodyText = Buffer.concat(body).toString();
             InventoryController.createProduct(req, res, bodyText);
         });
+        
     }
+
+
+    else if (url.startsWith('/api/products/') && method === 'PUT') {
+    const productId = url.split('/')[3];
+    let body = [];
+    req.on('data', chunk => body.push(chunk));
+    req.on('end', () => {
+        const bodyText = Buffer.concat(body).toString();
+        InventoryController.updateProductStock(req, res, productId, bodyText);
+    });
+}
 
     else if (url.startsWith('/api/products/') && method === 'GET') {
         const productId = url.split('/')[3];

@@ -14,7 +14,7 @@ const InventoryController = {
                         return res.end(JSON.stringify({ error: "Campos obligatorios incompletos" }));
                     }
 
-                    console.log(`📦 SUMANDO stock para orden ${orderId}`);
+                    console.log(` SUMANDO stock para orden ${orderId}`);
                     console.log(`   Productos: ${products.map(p => `${p.productName} x${p.quantity}`).join(', ')}`);
 
                     const results = [];
@@ -80,6 +80,54 @@ const InventoryController = {
         }
     },
 
+    async updateProductStock(req, res, productId, bodyText) {
+    try {
+        const body = JSON.parse(bodyText);
+        const { stock, action } = body;
+
+        const productRef = InventoryModel.db.ref(`inventory/${productId}`);
+        const snapshot = await productRef.once('value');
+        
+        if (!snapshot.exists()) {
+            res.statusCode = 404;
+            return res.end(JSON.stringify({ error: "Producto no encontrado" }));
+        }
+        
+        const currentStock = snapshot.val().stock || 0;
+        let newStock = currentStock;
+        let message = "";
+        
+        if (action === "add") {
+            newStock = currentStock + (stock || 0);
+            message = `Se agregaron ${stock} unidades. Stock actual: ${newStock}`;
+        } else if (action === "set") {
+            newStock = stock || 0;
+            message = `Stock actualizado a ${newStock} unidades`;
+        } else {
+            newStock = stock || 0;
+            message = `Stock actualizado a ${newStock} unidades`;
+        }
+        
+        await productRef.update({
+            stock: newStock,
+            last_updated: new Date().toISOString(),
+            last_action: "MANUAL_UPDATE"
+        });
+        
+        res.statusCode = 200;
+        res.end(JSON.stringify({
+            message: message,
+            productId: productId,
+            oldStock: currentStock,
+            newStock: newStock
+        }));
+        
+    } catch (error) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ error: error.message }));
+    }
+},
+
     async subtractStock(req, res) {
         try {
             let body = '';
@@ -93,7 +141,7 @@ const InventoryController = {
                         return res.end(JSON.stringify({ error: "Campos obligatorios incompletos" }));
                     }
 
-                    console.log(`📦 RESTANDO stock para orden ${orderId}`);
+                    console.log(` RESTANDO stock para orden ${orderId}`);
                     console.log(`   Productos: ${products.map(p => `${p.productName} x${p.quantity}`).join(', ')}`);
 
                     const results = [];

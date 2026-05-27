@@ -45,6 +45,11 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    if (req.url === '/UMA.png') {
+        serveStaticFile(req, res, './public/UMA.png', 'image/png');
+        return;
+    }
+
     try {
         inventoryRoutes(req, res);
     } catch (error) {
@@ -55,9 +60,9 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`🚀 Inventario service corriendo en http://localhost:${PORT}`);
-    console.log(`📊 Health check: http://localhost:${PORT}/health`);
-    console.log(`📦 API base: http://localhost:${PORT}/api`);
+    console.log(`Inventario service corriendo en http://localhost:${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/health`);
+    console.log(`API base: http://localhost:${PORT}/api`);
 });
 
 server.on('error', (error) => {
