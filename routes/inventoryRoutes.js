@@ -12,6 +12,10 @@ const inventoryRoutes = (req, res) => {
         InventoryController.restoreStock(req, res);
     }
 
+    else if (url === '/api/stock/subtract' && method === 'POST') {
+        InventoryController.subtractStock(req, res);
+    }
+
     else if (url === '/api/products' && method === 'GET') {
         InventoryController.getAllProducts(req, res);
     }

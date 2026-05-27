@@ -1,57 +1,7 @@
 const { db } = require('../config/firebase');
 
 const InventoryModel = {
-    async restoreStock(orderId, trackingNumber, action, products) {
-        const results = [];
-        const timestamp = new Date().toISOString();
-
-        for (const product of products) {
-            const productRef = db.ref(`inventory/${product.productId}`);
-            const snapshot = await productRef.once('value');
-            
-            let currentStock = 0;
-            let productData = {};
-            
-            if (snapshot.exists()) {
-                currentStock = snapshot.val().stock || 0;
-                productData = snapshot.val();
-            }
-            
-            const newStock = currentStock + product.quantity;
-            
-            await productRef.set({
-                productId: product.productId,
-                productName: product.productName,
-                stock: newStock,
-                sku: product.sku || productData.sku || '',
-                unitPrice: product.unitPrice || productData.unitPrice || 0,
-                last_updated: timestamp,
-                last_action: action,
-                last_order_id: orderId,
-                last_tracking: trackingNumber
-            });
-
-            results.push({
-                productId: product.productId,
-                productName: product.productName,
-                oldStock: currentStock,
-                newStock: newStock,
-                added: product.quantity
-            });
-        }
-
-        const movementRef = db.ref('stock_movements').push();
-        await movementRef.set({
-            orderId,
-            trackingNumber,
-            action,
-            products: products,
-            timestamp,
-            results
-        });
-
-        return results;
-    },
+    db: db,
 
     async getAllProducts() {
         const snapshot = await db.ref('inventory').once('value');
