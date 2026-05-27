@@ -146,10 +146,6 @@ function getActionName(action) {
     return action;
 }
 
-setInterval(() => {
-    loadProducts();
-    loadMovements();
-}, 30000);
 
 loadProducts();
 loadMovements();
