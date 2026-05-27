@@ -27,41 +27,39 @@
     <div class="hero">
         <div class="hero-content">
             <h1>Panel de Inventario</h1>
-            <p>Gestión de stock y control de productos</p>
+            <p>Gestion de stock y control de productos</p>
         </div>
     </div>
 
     <div class="container">
-        <!-- Tarjetas de estadísticas -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
-                <div class="stat-icon"></div>
+                <div class="stat-icon">[P]</div>
                 <h3>Productos Totales</h3>
                 <p id="totalProducts">0</p>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"></div>
+                <div class="stat-icon">[S]</div>
                 <h3>Stock Total</h3>
                 <p id="totalStock">0</p>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"></div>
+                <div class="stat-icon">[$]</div>
                 <h3>Valor Inventario</h3>
                 <p id="totalValue">$0</p>
             </div>
             <div class="stat-card">
-                <div class="stat-icon"></div>
+                <div class="stat-icon">[!]</div>
                 <h3>Stock Bajo</h3>
                 <p id="lowStock">0</p>
             </div>
         </div>
 
-        <!-- Sección de productos -->
         <div class="card">
             <div class="card-header">
-                <h2>Productos en Inventario</h2>
+                <h2>Lista de Productos en Inventario</h2>
                 <button class="btn-refresh" onclick="loadProducts()">
-                    <span></span> Actualizar
+                    [R] Actualizar
                 </button>
             </div>
             <div class="table-responsive">
@@ -71,12 +69,11 @@
             </div>
         </div>
 
-        <!-- Sección de movimientos recientes -->
         <div class="card">
             <div class="card-header">
-                <h2> Últimos Movimientos</h2>
+                <h2>Ultimos Movimientos</h2>
                 <button class="btn-refresh" onclick="loadMovements()">
-                    <span></span> Actualizar
+                    [R] Actualizar
                 </button>
             </div>
             <div id="movementsList">
@@ -89,14 +86,14 @@
         <div class="footer-container">
             <div class="footer-section">
                 <h4>Urban Market</h4>
-                <p>Sistema de Gestión de Inventario</p>
+                <p>Sistema de Gestion de Inventario</p>
                 <p>Control de stock en tiempo real</p>
             </div>
             <div class="footer-section">
-                <h4>Integración</h4>
-                <p>Conectado con Logística MS</p>
-                <p>Actualización automática de stock</p>
-                <p>Sincronización en tiempo real</p>
+                <h4>Integracion</h4>
+                <p>Conectado con Logistica MS</p>
+                <p>Actualizacion automatica de stock</p>
+                <p>Sincronizacion en tiempo real</p>
             </div>
             <div class="footer-section">
                 <h4>Contacto</h4>
@@ -105,7 +102,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Urban Market 2026 - Sistema de Gestión de Inventario</p>
+            <p>Urban Market 2026 - Sistema de Gestion de Inventario</p>
         </div>
     </footer>
 
