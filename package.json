@@ -1,0 +1,17 @@
+{
+  "name": "inventario-ms",
+  "version": "1.0.0",
+  "description": "Microservicio de inventario para Urban Market",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "firebase-admin": "^12.0.0"
+  },
+  "keywords": ["microservice", "inventory", "firebase", "realtime-database"],
+  "author": "Urban Market",
+  "license": "ISC"
+}

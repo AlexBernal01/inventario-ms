@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Market - Inventario</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">URBAN MARKET</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">Dashboard</a>
+                <a href="#">Productos</a>
+                <a href="#">Movimientos</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Gestión de Inventario</h1>
+            <p>Control de stock y movimientos de productos</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <h3>Productos Totales</h3>
+                <p id="totalProducts">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Stock Total</h3>
+                <p id="totalStock">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Valor Inventario</h3>
+                <p id="totalValue">$0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Stock Bajo</h3>
+                <p id="lowStock">0</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Productos en Inventario</h2>
+            <button class="btn-refresh" onclick="loadProducts()">🔄 Actualizar</button>
+            <div id="productsList">
+                <div class="loading">Cargando productos...</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Últimos Movimientos</h2>
+            <div id="movementsList">
+                <div class="loading">Cargando movimientos...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Urban Market</h4>
+                <p>Sistema de Gestión de Inventario</p>
+            </div>
+            <div class="footer-section">
+                <h4>Integración</h4>
+                <p>Conectado con Logística MS</p>
+                <p>Actualización automática de stock</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Urban Market 2026 - Inventario</p>
+        </div>
+    </footer>
+
+    <script src="/app.js"></script>
+</body>
+</html>
