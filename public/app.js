@@ -1,33 +1,48 @@
-const API_URL = window.location.origin;
+const API_URL = '';
 
 async function loadProducts() {
     const productsList = document.getElementById('productsList');
+    if (!productsList) {
+        console.error('No se encontró el elemento productsList');
+        return;
+    }
+    
     productsList.innerHTML = '<div class="loading">Cargando productos...</div>';
     
     try {
-        const response = await fetch(`${API_URL}/api/products`);
+        const response = await fetch('/api/products');
+        
+        if (!response.ok) {
+            throw new Error('Error en la respuesta: ' + response.status);
+        }
+        
         const result = await response.json();
+        
+        const totalProductsEl = document.getElementById('totalProducts');
+        const totalStockEl = document.getElementById('totalStock');
+        const totalValueEl = document.getElementById('totalValue');
+        const lowStockCountEl = document.getElementById('lowStockCount');
         
         if (!result.success || !result.data || result.data.length === 0) {
             productsList.innerHTML = '<div class="loading">No hay productos registrados</div>';
-            document.getElementById('totalProducts').innerText = '0';
-            document.getElementById('totalStock').innerText = '0';
-            document.getElementById('totalValue').innerText = '$0';
-            document.getElementById('lowStock').innerText = '0';
+            if (totalProductsEl) totalProductsEl.innerText = '0';
+            if (totalStockEl) totalStockEl.innerText = '0';
+            if (totalValueEl) totalValueEl.innerText = '$0';
+            if (lowStockCountEl) lowStockCountEl.innerText = '0';
             return;
         }
         
         const products = result.data;
         const stats = result.stats;
         
-        document.getElementById('totalProducts').innerText = stats.totalProducts || products.length;
-        document.getElementById('totalStock').innerText = stats.totalStock || 0;
-        document.getElementById('totalValue').innerText = '$' + (stats.totalValue || 0);
-        document.getElementById('lowStock').innerText = stats.lowStockCount || 0;
+        if (totalProductsEl) totalProductsEl.innerText = stats.totalProducts || products.length;
+        if (totalStockEl) totalStockEl.innerText = stats.totalStock || 0;
+        if (totalValueEl) totalValueEl.innerText = '$' + (stats.totalValue || 0);
+        if (lowStockCountEl) lowStockCountEl.innerText = stats.lowStockCount || 0;
         
-        let html = '<table class="products-table"><thead><tr>';
+        let html = '<div class="table-responsive"><table class="products-table"><thead></tr>';
         html += '<th>ID</th><th>Producto</th><th>SKU</th><th>Stock</th><th>Precio</th><th>Ultima Actualizacion</th>';
-        html += '</tr></thead><tbody>';
+        html += '</thead><tbody>';
         
         products.forEach(product => {
             const stock = product.stock || 0;
@@ -35,8 +50,8 @@ async function loadProducts() {
             const stockDisplay = stock < 10 ? '<span class="' + stockClass + '">' + stock + ' (Stock bajo)</span>' : '<span class="' + stockClass + '">' + stock + '</span>';
             
             html += '<tr>';
-            html += '<td><code>' + product.productId + '</code></td>';
-            html += '<td><strong>' + product.productName + '</strong></td>';
+            html += '<td><code>' + (product.productId || product.id) + '</code></td>';
+            html += '<td><strong>' + (product.productName || '-') + '</strong></td>';
             html += '<td>' + (product.sku || '-') + '</td>';
             html += '<td>' + stockDisplay + '</td>';
             html += '<td>$' + (product.unitPrice || 0).toFixed(2) + '</td>';
@@ -44,21 +59,31 @@ async function loadProducts() {
             html += '</tr>';
         });
         
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         productsList.innerHTML = html;
         
     } catch (error) {
         console.error('Error:', error);
-        productsList.innerHTML = '<div class="loading">Error al cargar productos</div>';
+        productsList.innerHTML = '<div class="loading">Error al cargar productos: ' + error.message + '</div>';
     }
 }
 
 async function loadMovements() {
     const movementsList = document.getElementById('movementsList');
+    if (!movementsList) {
+        console.error('No se encontró el elemento movementsList');
+        return;
+    }
+    
     movementsList.innerHTML = '<div class="loading">Cargando movimientos...</div>';
     
     try {
-        const response = await fetch(`${API_URL}/api/movements`);
+        const response = await fetch('/api/movements');
+        
+        if (!response.ok) {
+            throw new Error('Error en la respuesta: ' + response.status);
+        }
+        
         const movements = await response.json();
         
         if (!movements || movements.length === 0) {
@@ -85,9 +110,13 @@ async function loadMovements() {
             html += '<div class="movement-products">';
             html += '<strong>Productos afectados:</strong>';
             html += '<ul>';
-            movement.products.forEach(p => {
-                html += '<li>' + p.productName + ' x' + p.quantity + '</li>';
-            });
+            if (movement.products && movement.products.length > 0) {
+                movement.products.forEach(p => {
+                    html += '<li>' + (p.productName || p.name) + ' x' + (p.quantity || 0) + '</li>';
+                });
+            } else {
+                html += '<li>No hay detalles</li>';
+            }
             html += '</ul>';
             html += '</div>';
             html += '</div>';
@@ -96,7 +125,7 @@ async function loadMovements() {
         movementsList.innerHTML = html;
     } catch (error) {
         console.error('Error:', error);
-        movementsList.innerHTML = '<div class="loading">Error al cargar movimientos</div>';
+        movementsList.innerHTML = '<div class="loading">Error al cargar movimientos: ' + error.message + '</div>';
     }
 }
 
