@@ -26,17 +26,21 @@ async function loadProducts() {
         document.getElementById('lowStock').innerText = stats.lowStockCount || 0;
         
         let html = '<table class="products-table"><thead><tr>';
-        html += '<th>ID</th><th>Producto</th><th>SKU</th><th>Stock</th><th>Precio</th>';
+        html += '<th>ID</th><th>Producto</th><th>SKU</th><th>Stock</th><th>Precio</th><th>Última Actualización</th>';
         html += '</tr></thead><tbody>';
         
         products.forEach(product => {
-            const stockClass = (product.stock || 0) < 10 ? 'product-low-stock' : '';
+            const stock = product.stock || 0;
+            const stockClass = stock < 10 ? 'product-low-stock' : 'product-normal-stock';
+            const stockDisplay = stock < 10 ? `<span class="${stockClass}">${stock} (⚠️ Stock bajo)</span>` : `<span class="${stockClass}">${stock}</span>`;
+            
             html += `<tr>
-                <td>${product.productId}</td>
+                <td><code>${product.productId}</code></td>
                 <td><strong>${product.productName}</strong></td>
                 <td>${product.sku || '-'}</td>
-                <td class="${stockClass}">${product.stock || 0}</td>
+                <td>${stockDisplay}</td>
                 <td>$${(product.unitPrice || 0).toFixed(2)}</td>
+                <td>${product.last_updated ? new Date(product.last_updated).toLocaleString('es-MX') : '-'}</td>
             </tr>`;
         });
         
@@ -64,15 +68,21 @@ async function loadMovements() {
         
         let html = '';
         movements.forEach(movement => {
-            const actionClass = movement.action === 'CANCELACION' ? 'movement-action-cancelacion' : 'movement-action-devolucion';
+            const actionClass = getActionClass(movement.action);
+            const actionName = getActionName(movement.action);
+            
             html += `
                 <div class="movement-item">
-                    <div class="movement-date">${new Date(movement.timestamp).toLocaleString('es-MX')}</div>
-                    <div><strong>Orden:</strong> ${movement.orderId}</div>
-                    <div><strong>Guía:</strong> ${movement.trackingNumber}</div>
-                    <div><strong>Acción:</strong> <span class="${actionClass}">${movement.action}</span></div>
+                    <div class="movement-header">
+                        <div class="movement-date">📅 ${new Date(movement.timestamp).toLocaleString('es-MX')}</div>
+                        <span class="movement-action ${actionClass}">${actionName}</span>
+                    </div>
+                    <div class="movement-details">
+                        <div><strong>Orden:</strong> ${movement.orderId || '-'}</div>
+                        ${movement.trackingNumber ? `<div><strong>Guía:</strong> ${movement.trackingNumber}</div>` : ''}
+                    </div>
                     <div class="movement-products">
-                        <strong>Productos:</strong>
+                        <strong>Productos afectados:</strong>
                         <ul>
                             ${movement.products.map(p => `<li>${p.productName} x${p.quantity}</li>`).join('')}
                         </ul>
@@ -88,5 +98,30 @@ async function loadMovements() {
     }
 }
 
+function getActionClass(action) {
+    if (!action) return '';
+    const lowerAction = action.toLowerCase();
+    if (lowerAction.includes('cancelacion')) return 'movement-action-cancelacion';
+    if (lowerAction.includes('devolucion')) return 'movement-action-devolucion';
+    if (lowerAction.includes('restado')) return 'movement-action-stock_restado';
+    if (lowerAction.includes('sumado')) return 'movement-action-stock_sumado';
+    return '';
+}
+
+function getActionName(action) {
+    if (!action) return action;
+    if (action === 'STOCK_RESTADO') return '📉 Stock restado (Creación de envío)';
+    if (action === 'STOCK_SUMADO_CANCELACION') return '📈 Stock sumado (Cancelación)';
+    if (action === 'STOCK_SUMADO_DEVOLUCION') return '🔄 Stock sumado (Devolución)';
+    return action;
+}
+
+// Auto-refresh cada 30 segundos
+setInterval(() => {
+    loadProducts();
+    loadMovements();
+}, 30000);
+
+// Cargar datos al iniciar
 loadProducts();
 loadMovements();

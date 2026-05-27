@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Market - Inventario</title>
+    <title>Urban Market - Panel de Inventario</title>
     <link rel="stylesheet" href="/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -12,53 +12,73 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
+                <img src="/UMA.png" alt="Urban Market" class="logo-image" onerror="this.style.display='none'">
                 <span class="logo-text">URBAN MARKET</span>
             </div>
             <div class="nav-links">
-                <a href="#">Dashboard</a>
+                <a href="#" class="active">Inventario</a>
                 <a href="#">Productos</a>
                 <a href="#">Movimientos</a>
+                <a href="#">Reportes</a>
             </div>
         </div>
     </nav>
 
     <div class="hero">
         <div class="hero-content">
-            <h1>Gestión de Inventario</h1>
-            <p>Control de stock y movimientos de productos</p>
+            <h1>Panel de Inventario</h1>
+            <p>Gestión de stock y control de productos</p>
         </div>
     </div>
 
     <div class="container">
+        <!-- Tarjetas de estadísticas -->
         <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
+                <div class="stat-icon">📦</div>
                 <h3>Productos Totales</h3>
                 <p id="totalProducts">0</p>
             </div>
             <div class="stat-card">
+                <div class="stat-icon">📊</div>
                 <h3>Stock Total</h3>
                 <p id="totalStock">0</p>
             </div>
             <div class="stat-card">
+                <div class="stat-icon">💰</div>
                 <h3>Valor Inventario</h3>
                 <p id="totalValue">$0</p>
             </div>
             <div class="stat-card">
+                <div class="stat-icon">⚠️</div>
                 <h3>Stock Bajo</h3>
                 <p id="lowStock">0</p>
             </div>
         </div>
 
+        <!-- Sección de productos -->
         <div class="card">
-            <h2>Productos en Inventario</h2>
-            <button class="btn-refresh" onclick="loadProducts()">🔄 Actualizar</button>
-            <div id="productsList">
-                <div class="loading">Cargando productos...</div>
+            <div class="card-header">
+                <h2>📋 Productos en Inventario</h2>
+                <button class="btn-refresh" onclick="loadProducts()">
+                    <span>🔄</span> Actualizar
+                </button>
+            </div>
+            <div class="table-responsive">
+                <div id="productsList">
+                    <div class="loading">Cargando productos...</div>
+                </div>
             </div>
         </div>
 
+        <!-- Sección de movimientos recientes -->
         <div class="card">
-            <h2>Últimos Movimientos</h2>
+            <div class="card-header">
+                <h2>📜 Últimos Movimientos</h2>
+                <button class="btn-refresh" onclick="loadMovements()">
+                    <span>🔄</span> Actualizar
+                </button>
+            </div>
             <div id="movementsList">
                 <div class="loading">Cargando movimientos...</div>
             </div>
@@ -70,15 +90,22 @@
             <div class="footer-section">
                 <h4>Urban Market</h4>
                 <p>Sistema de Gestión de Inventario</p>
+                <p>Control de stock en tiempo real</p>
             </div>
             <div class="footer-section">
                 <h4>Integración</h4>
                 <p>Conectado con Logística MS</p>
                 <p>Actualización automática de stock</p>
+                <p>Sincronización en tiempo real</p>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p>soporte@urbanmarket.com</p>
+                <p>800-URBAN-MK</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Urban Market 2026 - Inventario</p>
+            <p>Urban Market 2026 - Sistema de Gestión de Inventario</p>
         </div>
     </footer>
 
